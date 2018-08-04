@@ -85,10 +85,11 @@ function initBuffers(gl) {
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     const positions = [
-        -2.0, 2.0,
-        2.0, 2.0,
-        -2.0, -2.0,
-        2.0, -2.0,
+        -1, 0,
+        0, 1,
+        0, -1,
+        1, 0
+
     ];
     gl.bufferData(gl.ARRAY_BUFFER,
         new Float32Array(positions),
@@ -109,7 +110,23 @@ function initBuffers(gl) {
         color: colorBuffer
     };
 }
-function drawScene(gl, programInfo, buffers) {
+
+var squareRotation = 0.0;
+var then = 0;
+
+// Draw the scene repeatedly
+function render(now) {
+    now *= 0.001;  // convert to seconds
+    const deltaTime = now - then;
+    then = now;
+
+    drawScene(gl, programInfo, buffers, deltaTime);
+
+    requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+function drawScene(gl, programInfo, buffers, deltaTime) {
     console.log("Draw Scene")
     gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
     gl.clearDepth(1.0);                 // Clear everything
@@ -152,6 +169,8 @@ function drawScene(gl, programInfo, buffers) {
     mat4.translate(modelViewMatrix,     // destination matrix
         modelViewMatrix,     // matrix to translate
         [-0.0, 0.0, -6.0]);  // amount to translate
+
+    mat4.rotate(modelViewMatrix, modelViewMatrix, squareRotation, [0, 0, 1]);
 
     // Tell WebGL how to pull out the positions from the position
     // buffer into the vertexPosition attribute.
@@ -212,9 +231,11 @@ function drawScene(gl, programInfo, buffers) {
         const vertexCount = 4;
         gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
     }
+    squareRotation += deltaTime;
+
 }
 
 const buffers = initBuffers(gl);
 
 // Draw the scene
-drawScene(gl, programInfo, buffers);
+// drawScene(gl, programInfo, buffers, deltaTime);
