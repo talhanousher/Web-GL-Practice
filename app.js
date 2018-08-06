@@ -51,7 +51,7 @@ const programInfo = {
 };
 
 const buffers = initBuffers(gl);
-const texture = loadTexture(gl, "https://c1.staticflickr.com/9/8873/18598400202_3af67ef38f_q.jpg");
+const texture = loadTexture(gl, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNyksZK_eMWsrWvvUTfpbuxL7TfgG5UfZlHeGAsgrUSoisdykD");
 
 
 var squareRotation = 0.0;
